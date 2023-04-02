@@ -371,16 +371,19 @@ namespace CameraBasicDroid
                 captureRequestBuilder = cameraDevice.CreateCaptureRequest(CameraTemplate.Preview);
                 captureRequestBuilder.AddTarget(surface);
 
-                var zoomGestureListener = new ZoomGestureListener(cameraCaptureSession, manager.GetCameraCharacteristics(cameraDevice.Id),captureRequestBuilder,captureCallback);
-                var touchEventHandler = new TouchEventHandler(this, zoomGestureListener);
-
-                _textureView.SetOnTouchListener(touchEventHandler);
-              
-
                 List<Surface> surfaces = new List<Surface>();
                 surfaces.Add(surface);
                 surfaces.Add(imageReader.Surface);
                 cameraDevice.CreateCaptureSession(surfaces, new CameraCaptureSessionListener(this), null);
+                
+                 if (cameraCaptureSession != null && captureRequestBuilder != null && captureCallback != null)
+                {
+
+                    var zoomGestureListener = new ZoomGestureListener(cameraCaptureSession, manager.GetCameraCharacteristics(cameraDevice.Id), captureRequestBuilder, captureCallback);
+                    var touchEventHandler = new TouchEventHandler(this, zoomGestureListener);
+
+                    _textureView.SetOnTouchListener(touchEventHandler);
+                }
 
             }
             catch (CameraAccessException e)
